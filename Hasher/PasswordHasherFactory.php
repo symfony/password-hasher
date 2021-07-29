@@ -61,14 +61,7 @@ class PasswordHasherFactory implements PasswordHasherFactoryInterface
             throw new \RuntimeException(sprintf('No password hasher has been configured for account "%s".', \is_object($user) ? get_debug_type($user) : $user));
         }
 
-        if (!$this->passwordHashers[$hasherKey] instanceof PasswordHasherInterface) {
-            $this->passwordHashers[$hasherKey] = $this->passwordHashers[$hasherKey] instanceof PasswordEncoderInterface
-                ? new PasswordHasherAdapter($this->passwordHashers[$hasherKey])
-                : $this->createHasher($this->passwordHashers[$hasherKey])
-            ;
-        }
-
-        return $this->passwordHashers[$hasherKey];
+        return $this->createHasherUsingAdapter($hasherKey);
     }
 
     /**
@@ -111,6 +104,18 @@ class PasswordHasherFactory implements PasswordHasherFactoryInterface
         return new MigratingPasswordHasher($hasher, ...$extrapasswordHashers);
     }
 
+    private function createHasherUsingAdapter($hasherKey)
+    {
+        if (!$this->passwordHashers[$hasherKey] instanceof PasswordHasherInterface) {
+            $this->passwordHashers[$hasherKey] = $this->passwordHashers[$hasherKey] instanceof PasswordEncoderInterface
+                ? new PasswordHasherAdapter($this->passwordHashers[$hasherKey])
+                : $this->createHasher($this->passwordHashers[$hasherKey])
+            ;
+        }
+
+        return $this->passwordHashers[$hasherKey];
+    }
+
     private function getHasherConfigFromAlgorithm(array $config): array
     {
         if ('auto' === $config['algorithm']) {
@@ -143,6 +148,9 @@ class PasswordHasherFactory implements PasswordHasherFactoryInterface
 
             foreach ($frompasswordHashers as $name) {
                 if ($hasher = $this->passwordHashers[$name] ?? false) {
+
+                    $hasher = $this->createHasherUsingAdapter($name);
+
                     $hasher = $hasher instanceof PasswordHasherInterface ? $hasher : $this->createHasher($hasher, true);
                 } else {
                     $hasher = $this->createHasher(['algorithm' => $name], true);
