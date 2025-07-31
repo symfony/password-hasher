@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\PasswordHasher\Tests\Hasher;
 
+use PHPUnit\Framework\Attributes\RequiresPhp;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\PasswordHasher\Exception\InvalidPasswordException;
 use Symfony\Component\PasswordHasher\Hasher\NativePasswordHasher;
@@ -73,9 +74,7 @@ class SodiumPasswordHasherTest extends TestCase
         $this->assertTrue($hasher->verify((new NativePasswordHasher(null, null, 4, \PASSWORD_BCRYPT))->hash($plainPassword), $plainPassword));
     }
 
-    /**
-     * @requires PHP < 8.4
-     */
+    #[RequiresPhp('<8.4')]
     public function testBcryptWithNulByteWithNativePasswordHash()
     {
         $hasher = new SodiumPasswordHasher(null, null);

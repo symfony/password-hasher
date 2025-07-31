@@ -11,6 +11,9 @@
 
 namespace Symfony\Component\PasswordHasher\Tests\Hasher;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\RequiresPhp;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\PasswordHasher\Exception\InvalidPasswordException;
 use Symfony\Component\PasswordHasher\Hasher\NativePasswordHasher;
@@ -32,9 +35,7 @@ class NativePasswordHasherTest extends TestCase
         new NativePasswordHasher(null, null, 32);
     }
 
-    /**
-     * @dataProvider validRangeData
-     */
+    #[DataProvider('validRangeData')]
     public function testCostInRange($cost)
     {
         $this->assertInstanceOf(NativePasswordHasher::class, new NativePasswordHasher(null, null, $cost));
@@ -99,9 +100,7 @@ class NativePasswordHasherTest extends TestCase
         $this->assertTrue($hasher->verify($hasher->hash($plainPassword), $plainPassword));
     }
 
-    /**
-     * @requires PHP < 8.4
-     */
+    #[RequiresPhp('<8.4')]
     public function testBcryptWithNulByteWithNativePasswordHash()
     {
         $hasher = new NativePasswordHasher(null, null, 4, \PASSWORD_BCRYPT);
@@ -169,10 +168,8 @@ class NativePasswordHasherTest extends TestCase
         new NativePasswordHasher(3, 9999);
     }
 
-    /**
-     * @testWith [1]
-     *           [40]
-     */
+    #[TestWith([1])]
+    #[TestWith([40])]
     public function testInvalidCostThrows(int $cost)
     {
         $this->expectException(\InvalidArgumentException::class);
