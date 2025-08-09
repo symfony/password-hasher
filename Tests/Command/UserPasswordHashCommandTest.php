@@ -258,12 +258,12 @@ class UserPasswordHashCommandTest extends TestCase
         ], ['decorated' => false]);
 
         $this->assertStringContainsString(<<<EOTXT
- For which user class would you like to hash a password? [Custom\Class\Native\User]:
-  [0] Custom\Class\Native\User
-  [1] Custom\Class\Pbkdf2\User
-  [2] Custom\Class\Test\User
-  [3] Symfony\Component\Security\Core\User\InMemoryUser
-EOTXT
+             For which user class would you like to hash a password? [Custom\Class\Native\User]:
+              [0] Custom\Class\Native\User
+              [1] Custom\Class\Pbkdf2\User
+              [2] Custom\Class\Test\User
+              [3] Symfony\Component\Security\Core\User\InMemoryUser
+            EOTXT
             , $this->passwordHasherCommandTester->getDisplay(true));
     }
 
