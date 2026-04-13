@@ -43,7 +43,7 @@ class NativePasswordHasherTest extends TestCase
     public static function validRangeData()
     {
         $costs = range(4, 31);
-        array_walk($costs, function (&$cost) { $cost = [$cost]; });
+        array_walk($costs, static function (&$cost) { $cost = [$cost]; });
 
         return $costs;
     }
