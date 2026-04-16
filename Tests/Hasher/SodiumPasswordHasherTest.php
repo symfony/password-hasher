@@ -74,7 +74,7 @@ class SodiumPasswordHasherTest extends TestCase
         $this->assertTrue($hasher->verify((new NativePasswordHasher(null, null, 4, \PASSWORD_BCRYPT))->hash($plainPassword), $plainPassword));
     }
 
-    #[RequiresPhp('<8.4')]
+    #[RequiresPhp('<8.4.0')]
     public function testBcryptWithNulByteWithNativePasswordHash()
     {
         $hasher = new SodiumPasswordHasher(null, null);

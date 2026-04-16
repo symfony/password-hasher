@@ -100,7 +100,7 @@ class NativePasswordHasherTest extends TestCase
         $this->assertTrue($hasher->verify($hasher->hash($plainPassword), $plainPassword));
     }
 
-    #[RequiresPhp('<8.4')]
+    #[RequiresPhp('<8.4.0')]
     public function testBcryptWithNulByteWithNativePasswordHash()
     {
         $hasher = new NativePasswordHasher(null, null, 4, \PASSWORD_BCRYPT);
